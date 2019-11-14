@@ -39,10 +39,16 @@
     </div>
     <div class="row">
         <div class="col-12 col-md-3">
-            <p>3/12</p>
+            <h2>Lounge Bouncer</h2>
+            <p>Lounge Bouncer is a self service check-in system provided to you by Collinson</p>
         </div>
         <div class="col-12 col-md-6">
-            <a href="/lounge/ABC">ABC</a>
+            <p>Welcome to {{lounge_name}}</p>
+            <p>Please enter your membership number to continue</p>
+            <form method="post" action="" id="entryForm">
+                {{ form.csrf_token }}
+                {{ form.membershipNo(size=20) }}
+            </form>
         </div>
         <div class="col-12 col-md-3">
             <p>3/12</p>
@@ -123,3 +129,18 @@
     </div>
 </footer>
 </html>
+<script>
+    var cardLength = 9;
+    $('#membershipNo').keypress(function(){
+        var currentInput = $('#'+event.target.id).val();
+        var currentLength = currentInput.length;
+        console.log(currentLength);
+        if(currentLength == cardLength){
+            $('#entryForm').submit();
+        }
+    });
+
+    window.setInterval(function(){
+      console.log('test');
+    }, 5000);
+</script>
