@@ -123,34 +123,31 @@
             <div class="copyright-inner-wrap">
                 Registered address : Cutlers Exchange, 123 Houndsditch, London, EC3A 7BU, UK
             </div>
-
-
         </div>
     </div>
 </footer>
 </html>
 <script>
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "https://api.meraki.com/api/v0/devices/Q2FV-K7QZ-K7B5/camera/analytics/live",
-  "method": "GET",
-  "headers": {
-    "X-Cisco-Meraki-API-Key": "86c458f08e922045e6260cfcb06b8b76aabf2d3b",
-    "User-Agent": "PostmanRuntime/7.19.0",
-    "Accept": "*/*",
-    "Cache-Control": "no-cache",
-    "Postman-Token": "21da5eb9-f8f3-4e2e-b72c-26639d9c45cd,f0f044a7-994f-44e5-8222-64cb0384b693",
-    "Accept-Encoding": "gzip, deflate",
-    "Referer": "https://api.meraki.com/api/v0/devices/Q2FV-K7QZ-K7B5/camera/analytics/live",
-    "Connection": "keep-alive",
-    "cache-control": "no-cache"
-  }
-}
+    $(document).ready(function() {
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+        });
+    });
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/bodycount",
+        "method": "GET",
+        "headers": {
+            "Access-Control-Allow-Origin":"*"
+        }
+    }
 
     window.setInterval(function(){
-    $.ajax(settings).done(function (response) {
-     console.log(response);   
-    });
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+        });
     }, 5000);
+
 </script>

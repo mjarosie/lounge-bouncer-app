@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import requests
+import json
 
 from flask import Flask, render_template
 from werkzeug.utils import redirect
@@ -54,7 +55,7 @@ def guests():
 
 
 @app.route('/bodycount')
-def index():
+def bodycount():
     headers = {
         'Accept': '*/*',
         'Accept-Encoding': 'gzip, deflate',
@@ -64,7 +65,12 @@ def index():
     response = requests.get('https://api.meraki.com/api/v0/devices/Q2FV-K7QZ-K7B5/camera/analytics/live',
                             headers=headers,
                             verify=False)
-    return render_template('bodycount.html', bodycount=response.content)
+    print(json.loads(response.content)["zones"]["0"]["person"])
+    response =  json.dumps(json.loads(response.content)["zones"]["0"]["person"])
+
+    print("returning:")
+    print(response)
+    return response
 
 
 if __name__ == "__main__":
