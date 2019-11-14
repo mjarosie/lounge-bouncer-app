@@ -1,13 +1,19 @@
+#!/usr/bin/python
+
+import requests
+
 from flask import Flask, render_template
 from werkzeug.utils import redirect
 from wtforms import StringField
 from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm
+from keypad import Keypad
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
 
 class MyForm(FlaskForm):
     membershipNo = StringField('membershipNo', validators=[DataRequired()])
@@ -32,6 +38,33 @@ def submit(lounge_name=None):
 @app.route('/success', methods=('GET', 'POST'))
 def success():
     return render_template('success.html')
+
+
+@app.route('/guests', methods=('GET', 'POST'))
+def guests():
+    kp = Keypad(column_count=4)  # waiting for a keypress
+    digit = None
+    while digit == None:
+        digit = kp.get_key()
+    # Print result
+    print(digit)
+    guest_count = digit
+    print(guest_count)
+    return render_template('index.html')
+
+
+@app.route('/bodycount')
+def index():
+    headers = {
+        'Accept': '*/*',
+        'Accept-Encoding': 'gzip, deflate',
+        'X-Cisco-Meraki-API-Key': '86c458f08e922045e6260cfcb06b8b76aabf2d3b',
+    }
+
+    response = requests.get('https://api.meraki.com/api/v0/devices/Q2FV-K7QZ-K7B5/camera/analytics/live',
+                            headers=headers,
+                            verify=False)
+    return render_template('bodycount.html', bodycount=response.content)
 
 
 if __name__ == "__main__":
