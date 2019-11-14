@@ -1,7 +1,142 @@
-<!doctype html>
-<title>Hello</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://www.collinsongroup.com/Content/dist/css/style.min.css?v=63704489804">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container n1ed_be_tmp">
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p>12/12</p>
+        </div>
+    </div>
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+</div>
+<div class="container n1ed_be_tmp">
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <h2>Lounge Bouncer</h2>
+            <p>Lounge Bouncer is a self service check-in system provided to you by Collinson</p>
+        </div>
+        <div class="col-12 col-md-6">
+            <p>Welcome to {{lounge_name}}</p>
+            <p>Please enter your membership number to continue</p>
+            <form method="post" action="" id="entryForm">
+                {{ form.csrf_token }}
+                {{ form.membershipNo(size=20) }}
+            </form>
+        </div>
+        <div class="col-12 col-md-3">
+            <p>3/12</p>
+        </div>
+    </div>
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+</div>
+<div class="container n1ed_be_tmp">
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p>12/12</p>
+        </div>
+    </div>
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+</div>
+<div class="container n1ed_be_tmp">
+    <div class="row n1ed_be_tmp">
+        <div class="col-12 n1ed_be_tmp"></div>
+    </div>
+</div>
+</body>
+<footer class="main-footer" id="page-footer">
+    <div class="container">
+        <div class="logo-wrap">
+            <a href="https://www.collinsongroup.com/en-eur"><img
+                    src="https://www.collinsongroup.com:443/-/media/collinson/company-logos/footer-logo.png?h=94&amp;w=426&amp;la=en&amp;hash=1C8FCC5BA682A72F596F7305212AF1DB58BA70C6"
+                    height="94" width="426" alt="Collinson Logo"></a></div>
+        <div class="social-wrap">
+            <a href="https://twitter.com/Collinson/" target="_blank"> <span class="hidden">Twitter</span>
+                <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
+            </a><a href="https://www.linkedin.com/company/collinson/" target="_blank"> <span
+                class="hidden">Linkedin</span>
+            <i class="fa fa-linkedin fa-fw" aria-hidden="true"></i>
+        </a>
+        </div>
+        <div class="footer-links">
+            <div class="footer-link-wrap">
+                <a href="https://www.collinsongroup.com/en-eur/accessibility">Accessibility</a>
+            </div>
+            <div class="footer-link-wrap">
+                <a href="https://www.collinsongroup.com/en-eur/privacy-policy">Privacy Policy</a>
+            </div>
+            <div class="footer-link-wrap">
+                <a href="https://www.collinsongroup.com/en-eur/terms-of-use">Terms of Use</a>
+            </div>
+            <div class="footer-link-wrap">
+                <a href="https://www.collinsongroup.com/en-eur/cookie-policy">Cookie Policy</a>
+            </div>
+            <div class="footer-link-wrap">
+                <a href="https://www.collinsongroup.com/en-eur/legal-statements">Legal statements</a>
+            </div>
+            <div class="footer-link-wrap no-pipe">
+                <a href="https://www.collinsongroup.com/en-eur/who-we-are">Who we are</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="copyright-inner-wrap">
+                © 2019 Collinson International Limited. Registered in England &amp; Wales under registration No. 2577557
+            </div>
+            <div class="copyright-inner-wrap">
+                Registered address : Cutlers Exchange, 123 Houndsditch, London, EC3A 7BU, UK
+            </div>
+
+
+        </div>
+    </div>
+</footer>
+</html>
+<script>
+    var cardLength = 9;
+    $('#membershipNo').keypress(function(){
+        var currentInput = $('#'+event.target.id).val();
+        var currentLength = currentInput.length;
+        console.log(currentLength);
+        if(currentLength == cardLength){
+            $('#entryForm').submit();
+        }
+    });
+</script>
