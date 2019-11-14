@@ -126,6 +126,7 @@
         </div>
     </div>
 </footer>
+<div id="barchart">&nbsp;</div>
 </html>
 <script>
     $(document).ready(function() {
@@ -148,6 +149,7 @@
         $.ajax(settings).done(function (response) {
             console.log(response);
         });
+	    $.ajax({url:'/capacity'}).done(function(data){$('#barchart').addClass(data)})
     }, 5000);
 
 </script>

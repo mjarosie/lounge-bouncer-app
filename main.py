@@ -14,6 +14,9 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+appBodycount = 0 
+appClass = 'green'
+appCapacity = 100
 
 
 class MyForm(FlaskForm):
@@ -68,10 +71,22 @@ def bodycount():
     print(json.loads(response.content)["zones"]["0"]["person"])
     response =  json.dumps(json.loads(response.content)["zones"]["0"]["person"])
 
+    appBodycount=response
     print("returning:")
-    print(response)
+    print(appBodycount)
     return response
 
+
+@app.route('/capacity')
+def capacity():
+    capacityPercentage = (appBodycount / appCapacity) * 100
+    if capacityPercentage <= 33:
+        appClass = 'green'
+    elif capacityPercentage <= 65:
+        appClass = 'orange'
+    else:
+        appClass = 'red'
+    return appClass
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
