@@ -139,8 +139,31 @@
             $('#entryForm').submit();
         }
     });
+      
+    var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://api.meraki.com/api/v0/devices/Q2FV-K7QZ-K7B5/camera/analytics/recent",
+  "method": "GET",
+  "headers": {
+    "X-Cisco-Meraki-API-Key": "86c458f08e922045e6260cfcb06b8b76aabf2d3b",
+    "User-Agent": "PostmanRuntime/7.19.0",
+    "Accept": "*/*",
+    "Cache-Control": "no-cache",
+    "Postman-Token": "4cf92be5-1048-4f7d-877d-f87c82e3b42a,af869a66-8122-4565-9b19-51dabfc7795f",
+    "Accept-Encoding": "gzip, deflate",
+    "Referer": "https://api.meraki.com/api/v0/devices/Q2FV-K7QZ-K7B5/camera/analytics/recent",
+    "Connection": "keep-alive",
+    "cache-control": "no-cache"
+  }
+}
+
+$.ajax(settings).done(function (response) {
+});
 
     window.setInterval(function(){
-      console.log('test');
+    $.ajax(settings).done(function (response) {
+     console.log(response);   
+    });
     }, 5000);
 </script>
