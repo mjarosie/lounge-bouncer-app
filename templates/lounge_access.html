@@ -50,9 +50,8 @@
             <p>Please enter your membership number to continue</p>
             <form method="post" action="" id="entryForm">
                 {{ form.csrf_token }}
-                {{ form.membershipNo(size=20) }}
+                <input type="text" name="membershipNo" id="membershipNo" />
             </form>
-
             The lounge capacity estimation:
             <div class="progress-bar">
                 <span></span>
@@ -137,6 +136,11 @@
 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 </html>
 <script>
+    var lengthConst = 10;
+    {% for key in hourList %}
+        console.log({{key}});
+    {% endfor %}
+
     var options = {
         title: {
             text: "Lounge capacity usage"
@@ -146,11 +150,9 @@
             // Change type to "doughnut", "line", "splineArea", etc.
             type: "column",
             dataPoints: [
-                { label: "00:00 - 01:00",  y: 300  },
-                { label: "01:00 - 02:00", y: 250  },
-                { label: "02:00 - 03:00", y: 270  },
-                { label: "03:00 - 04:00",  y: 370  },
-                { label: "04:00 - 05:00",  y: 500  }
+                {% for key in hourList %}
+                    { label: "{{key-1}}:00 - {{key}}:00",  y: {{ hourList[key] }}  },
+                {% endfor %}
             ]
         }
         ]
@@ -179,10 +181,40 @@
         });
     }
 
+    function pullCameraResult(){
+	    $.ajax({url:'/camera'}).success(function(membershipId){
+	        console.log("/camera endpoint responded with:");
+	        console.log(membershipId);
+            $('#membershipNo').val(membershipId);
+            $('#membershipNo').change();
+        });
+    }
+
+    $('#membershipNo').on("input", function(event){
+        console.log("#membershipNo input event triggered");
+        if(event.target.value.length == lengthConst){
+            console.log("#membershipNo submitting form");
+            $('#entryForm').submit();
+        }
+    });
+
+    $('#membershipNo').on("change", function(event){
+        console.log("#membershipNo change event triggered");
+        if(event.target.value.length == lengthConst){
+            console.log("#membershipNo submitting form");
+            $('#entryForm').submit();
+        }
+    });
+
+
     $(document).ready(function() {
         pullCapacity();
+        pullCameraResult();
         $("#chartContainer").CanvasJSChart(options);
     });
 
-    window.setInterval(pullCapacity, 5000);
+    window.setInterval(function() {
+        pullCapacity();
+        pullCameraResult();
+    }, 5000);
 </script>
