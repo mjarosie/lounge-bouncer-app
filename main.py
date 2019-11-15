@@ -31,7 +31,7 @@ def index():
 def submit(lounge_name=None):
     form = MyForm()
     
-    for file in glob.glob("~/hackthon/lounge-bouncer-app/*.hour"):
+    for file in glob.glob("/home/pi/hackthon/lounge-bouncer-app/*.hour"):
         print("reading {}".format(file))
         hour = os.path.basename(file).replace('.hour', '')
         print("hour {}".format(hour))
@@ -49,7 +49,19 @@ def submit(lounge_name=None):
 
 @app.route('/success', methods=('GET', 'POST'))
 def success():
-    return render_template('success.html')
+    access = false
+    with open('data/CollinsonStaffPPMembers.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                line_count += 1
+            else:
+                if row[0]==cardNumber:
+                    access = true
+            line_count += 1
+
+    return render_template('success.html',successful=access)
 
 
 @app.route('/guests', methods=('GET', 'POST'))
@@ -83,11 +95,6 @@ def capacity():
     capacity_percentage = (app_bodycount / app_capacity) * 100
     print("Calculated capacity percentage: = {}".format(capacity_percentage))
     return str(capacity_percentage)
-
-
-@app.route('/camera')
-def camera():
-    return "1234567890"
 
 
 if __name__ == "__main__":

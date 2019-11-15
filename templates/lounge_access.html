@@ -143,7 +143,7 @@
 
     var options = {
         title: {
-            text: "Lounge capacity usage"
+            text: "Lounge Usage"
         },
         data: [
         {
@@ -151,7 +151,7 @@
             type: "column",
             dataPoints: [
                 {% for key in hourList %}
-                    { label: "{{key-1}}:00 - {{key}}:00",  y: {{ hourList[key] }}  },
+                    { label: "{{key}}:00 - {{key}}:59",  y: {{ hourList[key] }}  },
                 {% endfor %}
             ]
         }
