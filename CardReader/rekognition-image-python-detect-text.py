@@ -53,7 +53,7 @@ def process(photo, bucket, oldCard):
 
 
 def main():
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(1)
     img_name = "card.png"
     bucket = 'collinsoncards'
     oldCard = "card"
@@ -76,7 +76,7 @@ def main():
                 if len(approx) == 4:
                     cv2.imwrite(img_name, frame)
                     card_number = process(img_name, bucket, oldCard)
-                    if len(card_number) > 0:
+                    if card_number is not None and len(card_number) > 0:
                         cam.release()
                         return card_number
 
