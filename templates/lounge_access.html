@@ -8,6 +8,7 @@
           href="https://www.collinsongroup.com/Content/dist/css/style.min.css?v=63704489804">
     <script src="https://code.jquery.com/jquery-3.4.1.js"
             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
 </head>
 <body>
 <div class="container n1ed_be_tmp">
@@ -126,30 +127,38 @@
         </div>
     </div>
 </footer>
-<div id="barchart">&nbsp;</div>
+
+<div id="progress-bar">
+    <div id="progress-bar-fill"></div>
+</div>
+
 </html>
 <script>
     $(document).ready(function() {
-        $.ajax(settings).done(function (response) {
-            console.log(response);
+	    $.ajax({url:'/capacity'}).done(function(data){
+	        $('#capacity-meter').addClass(data);
         });
     });
 
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "/bodycount",
-        "method": "GET",
-        "headers": {
-            "Access-Control-Allow-Origin":"*"
-        }
-    }
-
     window.setInterval(function(){
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-        });
-	    $.ajax({url:'/capacity'}).done(function(data){$('#barchart').addClass(data)})
-    }, 5000);
+        var bodyCount;
+	    $.ajax({url:'/capacity'}).done(function(cap){
+	        console.log(cap);
 
+            var capacityClass;
+            if (cap <= 33){
+                capacityClass='green'
+            }
+            else if (cap <= 65){
+                capacityClass='orange'
+            }
+            else {
+                capacityClass='red'
+            }
+
+	        console.log("Setting #progress-bar-fill class to " + capacityClass);
+	        $('#progress-bar-fill').addClass(capacityClass);
+	        $('#progress-bar-fill').attr('width', "" + cap + "%");
+        });
+    }, 5000);
 </script>
