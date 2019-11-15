@@ -10,12 +10,12 @@ def nothing(x):
 cap = cv2.VideoCapture(1)
 
 cv2.namedWindow("Trackbars")
-cv2.createTrackbar("L-H", "Trackbars", 0, 180, nothing)
-cv2.createTrackbar("L-S", "Trackbars", 66, 255, nothing)
-cv2.createTrackbar("L-V", "Trackbars", 134, 255, nothing)
-cv2.createTrackbar("U-H", "Trackbars", 180, 180, nothing)
-cv2.createTrackbar("U-S", "Trackbars", 255, 255, nothing)
-cv2.createTrackbar("U-V", "Trackbars", 243, 255, nothing)
+cv2.createTrackbar("L-H", "Trackbars", 0, 180, None)
+cv2.createTrackbar("L-S", "Trackbars", 66, 255, None)
+cv2.createTrackbar("L-V", "Trackbars", 134, 255, None)
+cv2.createTrackbar("U-H", "Trackbars", 180, 180, None)
+cv2.createTrackbar("U-S", "Trackbars", 255, 255, None)
+cv2.createTrackbar("U-V", "Trackbars", 243, 255, None)
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
