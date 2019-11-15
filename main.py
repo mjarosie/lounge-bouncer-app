@@ -29,6 +29,7 @@ def index():
 @app.route('/lounge/<lounge_name>', methods=('GET', 'POST'))
 def submit(lounge_name=None):
     form = MyForm()
+
     if form.validate_on_submit():
         print('form valid')
         return redirect('/success')
@@ -69,7 +70,7 @@ def capacity():
 
     response = json.dumps(json.loads(response.content)["zones"]["0"]["person"])
     print("Camera responded with body count = {}".format(response))
-    app_bodycount = int(response)
+    app_bodycount = float(response)
     capacity_percentage = (app_bodycount / app_capacity) * 100
     print("Calculated capacity percentage: = {}".format(capacity_percentage))
     return str(capacity_percentage)
