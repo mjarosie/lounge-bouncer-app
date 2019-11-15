@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import requests
 import json
@@ -68,7 +68,7 @@ def capacity():
                             verify=False)
 
     response = json.dumps(json.loads(response.content)["zones"]["0"]["person"])
-
+    print("Camera responded with body count = {}".format(response))
     app_bodycount = int(response)
     capacity_percentage = (app_bodycount / app_capacity) * 100
 
