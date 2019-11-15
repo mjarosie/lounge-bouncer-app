@@ -2,6 +2,7 @@
 
 import requests
 import json
+import glob, os
 
 from flask import Flask, render_template
 from werkzeug.utils import redirect
@@ -15,7 +16,7 @@ app.config.from_object(__name__)
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app_capacity = 10
-
+hourList = {}
 
 class MyForm(FlaskForm):
     membershipNo = StringField('membershipNo', validators=[DataRequired()])
@@ -29,13 +30,21 @@ def index():
 @app.route('/lounge/<lounge_name>', methods=('GET', 'POST'))
 def submit(lounge_name=None):
     form = MyForm()
+    
+    for file in glob.glob("~/hackthon/lounge-bouncer-app/*.hour"):
+        print("reading {}".format(file))
+        hour = os.path.basename(file).replace('.hour', '')
+        print("hour {}".format(hour))
+        content = open(file, "r").read()
+        print("content: {}".format(content))
+        hourList[hour] = content
 
     if form.validate_on_submit():
         print('form valid')
         return redirect('/success')
     else:
         print('form not valid')
-    return render_template('lounge_access.html', form=form, lounge_name=lounge_name)
+    return render_template('lounge_access.html', form=form, lounge_name=lounge_name, hourlist=hourList)
 
 
 @app.route('/success', methods=('GET', 'POST'))
