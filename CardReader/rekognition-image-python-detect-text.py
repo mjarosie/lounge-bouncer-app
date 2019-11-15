@@ -32,19 +32,16 @@ def process():
     response = client.detect_text(Image={'S3Object': {'Bucket': bucket, 'Name': photo}})
 
     textDetections = response['TextDetections']
-    print ('Detected text')
     oldCard = "card"
     for text in textDetections:
-        print ('Detected text:' + text['DetectedText'])
 
-        if len(text['DetectedText']) == 10:
+        if (text['DetectedText'].isdigit()) and len(text['DetectedText']) == 10:
             if oldCard == text['DetectedText']:
                 print("old card")
             else:
                 card = text['DetectedText']
                 print card
                 oldCard = card
-        print
 
 
 while True:
