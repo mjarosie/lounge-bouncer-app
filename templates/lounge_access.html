@@ -8,7 +8,7 @@
           href="https://www.collinsongroup.com/Content/dist/css/style.min.css?v=63704489804">
     <script src="https://code.jquery.com/jquery-3.4.1.js"
             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
 </head>
 <body>
 <div class="container n1ed_be_tmp">
@@ -44,12 +44,17 @@
             <p>Lounge Bouncer is a self service check-in system provided to you by Collinson</p>
         </div>
         <div class="col-12 col-md-6">
-            <p>Welcome to {{lounge_name}}</p>
+            <p>Welcome to {{lounge_name}} lounge</p>
             <p>Please enter your membership number to continue</p>
             <form method="post" action="" id="entryForm">
                 {{ form.csrf_token }}
                 {{ form.membershipNo(size=20) }}
             </form>
+
+            The lounge capacity estimation:
+            <div class="progress-bar">
+                <span></span>
+            </div>
         </div>
         <div class="col-12 col-md-3">
             <p>3/12</p>
@@ -128,19 +133,9 @@
     </div>
 </footer>
 
-<div id="progress-bar">
-    <div id="progress-bar-fill"></div>
-</div>
-
 </html>
 <script>
-    $(document).ready(function() {
-	    $.ajax({url:'/capacity'}).done(function(data){
-	        $('#capacity-meter').addClass(data);
-        });
-    });
-
-    window.setInterval(function(){
+    function pullCapacity(){
         var bodyCount;
 	    $.ajax({url:'/capacity'}).done(function(cap){
 	        console.log(cap);
@@ -156,9 +151,14 @@
                 capacityClass='red'
             }
 
-	        console.log("Setting #progress-bar-fill class to " + capacityClass);
-	        $('#progress-bar-fill').addClass(capacityClass);
-	        $('#progress-bar-fill').attr('width', "" + cap + "%");
+            var capacityFillPercentage = "" + cap + "%";
+            $('.progress-bar>span').addClass(capacityClass);
+	        $('.progress-bar>span').css('width', capacityFillPercentage);
+	        $('.progress-bar>span').text(capacityFillPercentage);
         });
-    }, 5000);
+    }
+
+    $(document).ready(pullCapacity);
+
+    window.setInterval(pullCapacity, 5000);
 </script>

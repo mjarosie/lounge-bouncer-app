@@ -69,20 +69,10 @@ def capacity():
 
     response = json.dumps(json.loads(response.content)["zones"]["0"]["person"])
 
-    # Overwrite for debugging purposes for now.
-    response = "30"
-
     app_bodycount = int(response)
     capacity_percentage = (app_bodycount / app_capacity) * 100
 
     return str(capacity_percentage)
-    #
-    # if capacity_percentage <= 33:
-    #     return 'green'
-    # elif capacity_percentage <= 65:
-    #     return 'orange'
-    # else:
-    #     return 'red'
 
 
 if __name__ == "__main__":
