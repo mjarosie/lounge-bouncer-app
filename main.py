@@ -71,7 +71,7 @@ def capacity():
     print("Camera responded with body count = {}".format(response))
     app_bodycount = int(response)
     capacity_percentage = (app_bodycount / app_capacity) * 100
-
+    print("Calculated capacity percentage: = {}".format(capacity_percentage))
     return str(capacity_percentage)
 
 
