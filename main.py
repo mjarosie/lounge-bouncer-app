@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import requests
 import json
@@ -14,9 +14,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-appBodycount = 0 
-appClass = 'green'
-appCapacity = 100
+app_capacity = 10
 
 
 class MyForm(FlaskForm):
@@ -31,6 +29,7 @@ def index():
 @app.route('/lounge/<lounge_name>', methods=('GET', 'POST'))
 def submit(lounge_name=None):
     form = MyForm()
+
     if form.validate_on_submit():
         print('form valid')
         return redirect('/success')
@@ -57,8 +56,8 @@ def guests():
     return render_template('index.html')
 
 
-@app.route('/bodycount')
-def bodycount():
+@app.route('/capacity')
+def capacity():
     headers = {
         'Accept': '*/*',
         'Accept-Encoding': 'gzip, deflate',
@@ -68,25 +67,14 @@ def bodycount():
     response = requests.get('https://api.meraki.com/api/v0/devices/Q2FV-K7QZ-K7B5/camera/analytics/live',
                             headers=headers,
                             verify=False)
-    print(json.loads(response.content)["zones"]["0"]["person"])
-    response =  json.dumps(json.loads(response.content)["zones"]["0"]["person"])
 
-    appBodycount=response
-    print("returning:")
-    print(appBodycount)
-    return response
+    response = json.dumps(json.loads(response.content)["zones"]["0"]["person"])
+    print("Camera responded with body count = {}".format(response))
+    app_bodycount = float(response)
+    capacity_percentage = (app_bodycount / app_capacity) * 100
+    print("Calculated capacity percentage: = {}".format(capacity_percentage))
+    return str(capacity_percentage)
 
-
-@app.route('/capacity')
-def capacity():
-    capacityPercentage = (appBodycount / appCapacity) * 100
-    if capacityPercentage <= 33:
-        appClass = 'green'
-    elif capacityPercentage <= 65:
-        appClass = 'orange'
-    else:
-        appClass = 'red'
-    return appClass
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)

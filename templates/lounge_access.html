@@ -8,6 +8,9 @@
           href="https://www.collinsongroup.com/Content/dist/css/style.min.css?v=63704489804">
     <script src="https://code.jquery.com/jquery-3.4.1.js"
             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
 </head>
 <body>
 <div class="container n1ed_be_tmp">
@@ -21,7 +24,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <p>12/12</p>
+            <p>&nbsp;</p>
         </div>
     </div>
     <div class="row n1ed_be_tmp">
@@ -43,15 +46,20 @@
             <p>Lounge Bouncer is a self service check-in system provided to you by Collinson</p>
         </div>
         <div class="col-12 col-md-6">
-            <p>Welcome to {{lounge_name}}</p>
+            <p>Welcome to {{lounge_name}} lounge</p>
             <p>Please enter your membership number to continue</p>
             <form method="post" action="" id="entryForm">
                 {{ form.csrf_token }}
                 {{ form.membershipNo(size=20) }}
             </form>
+
+            The lounge capacity estimation:
+            <div class="progress-bar">
+                <span></span>
+            </div>
         </div>
         <div class="col-12 col-md-3">
-            <p>3/12</p>
+            <p>&nbsp;</p>
         </div>
     </div>
     <div class="row n1ed_be_tmp">
@@ -69,7 +77,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <p>12/12</p>
+            <p>&nbsp;</p>
         </div>
     </div>
     <div class="row n1ed_be_tmp">
@@ -126,30 +134,55 @@
         </div>
     </div>
 </footer>
-<div id="barchart">&nbsp;</div>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
 </html>
 <script>
-    $(document).ready(function() {
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-        });
-    });
-
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "/bodycount",
-        "method": "GET",
-        "headers": {
-            "Access-Control-Allow-Origin":"*"
+    var options = {
+        title: {
+            text: "Lounge capacity usage"
+        },
+        data: [
+        {
+            // Change type to "doughnut", "line", "splineArea", etc.
+            type: "column",
+            dataPoints: [
+                { label: "00:00 - 01:00",  y: 300  },
+                { label: "01:00 - 02:00", y: 250  },
+                { label: "02:00 - 03:00", y: 270  },
+                { label: "03:00 - 04:00",  y: 370  },
+                { label: "04:00 - 05:00",  y: 500  }
+            ]
         }
+        ]
+    };
+
+    function pullCapacity(){
+        var bodyCount;
+	    $.ajax({url:'/capacity'}).done(function(cap){
+	        console.log(cap);
+
+            var capacityClass;
+            if (cap <= 33){
+                capacityClass='green'
+            }
+            else if (cap <= 65){
+                capacityClass='orange'
+            }
+            else {
+                capacityClass='red'
+            }
+
+            var capacityFillPercentage = "" + cap + "%";
+            $('.progress-bar>span').addClass(capacityClass);
+	        $('.progress-bar>span').css('width', capacityFillPercentage);
+	        $('.progress-bar>span').text(capacityFillPercentage);
+        });
     }
 
-    window.setInterval(function(){
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-        });
-	    $.ajax({url:'/capacity'}).done(function(data){$('#barchart').addClass(data)})
-    }, 5000);
+    $(document).ready(function() {
+        pullCapacity();
+        $("#chartContainer").CanvasJSChart(options);
+    });
 
+    window.setInterval(pullCapacity, 5000);
 </script>
