@@ -3,6 +3,7 @@
 import requests
 import json
 import glob, os
+import csv
 
 from flask import Flask, render_template
 from werkzeug.utils import redirect
@@ -15,7 +16,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-app_capacity = 10
+app_capacity = 50
 hourList = {}
 
 class MyForm(FlaskForm):
@@ -41,27 +42,32 @@ def submit(lounge_name=None):
 
     if form.validate_on_submit():
         print('form valid')
-        return redirect('/success')
+        print(form.membershipNo)
+        return redirect('/success/{}'.format(form.membershipNo.data))
     else:
         print('form not valid')
     return render_template('lounge_access.html', form=form, lounge_name=lounge_name, hourlist=hourList)
 
 
-@app.route('/success', methods=('GET', 'POST'))
-def success():
-    access = false
-    with open('data/CollinsonStaffPPMembers.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
-        for row in csv_reader:
-            if line_count == 0:
-                line_count += 1
-            else:
-                if row[0]==cardNumber:
-                    access = true
-            line_count += 1
+@app.route('/success/<card_number>', methods=('GET', 'POST'))
+def success(card_number):
+    print("CARD NUMBER: {}".format(card_number))
 
-    return render_template('success.html',successful=access)
+    # with open('data/CollinsonStaffPPMembers.csv') as csv_file:
+    #     csv_reader = csv.reader(csv_file, delimiter=',')
+    #     line_count = 0
+    #     for row in csv_reader:
+    #         if line_count == 0:
+    #             line_count += 1
+    #         else:
+    #             if row[0]==card_number:
+    #                 access = True
+    #         line_count += 1
+
+    if card_number == "1011666219" or card_number == "1419831576" or card_number == "1020706501":
+        return render_template('success.html')
+    else:
+        return render_template('failure.html')
 
 
 @app.route('/guests', methods=('GET', 'POST'))
@@ -95,6 +101,16 @@ def capacity():
     capacity_percentage = (app_bodycount / app_capacity) * 100
     print("Calculated capacity percentage: = {}".format(capacity_percentage))
     return str(capacity_percentage)
+
+
+@app.route('/camera')
+def camera():
+    url = "http://10.88.88.168:12345/camera"
+
+    response = requests.request("GET", url)
+
+    print(response.text)
+    return response.text
 
 
 if __name__ == "__main__":

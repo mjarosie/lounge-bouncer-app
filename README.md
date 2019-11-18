@@ -1,4 +1,6 @@
-#lounge-bouncer
+# lounge-bouncer
+
+![lounge-bouncer-logo](graphics/logo.png)
 
 Run:
 
