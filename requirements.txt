@@ -2,7 +2,7 @@ flask==1.1.1
 flask-wtf==0.14.2
 wtforms==2.2.1
 RPi.GPIO==0.7.0
-requests==2.20.1
+requests==2.31.0
 boto3==1.10.18
 pyzbar==0.1.8
 Pillow==6.2.1
